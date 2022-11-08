@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
 
   ## WireGuard - VPN server ##
-   wireguard:
+  wireguard:
     container_name: wireguard
     image: lscr.io/linuxserver/wireguard:v1.0.20210914-ls75
     restart: unless-stopped
