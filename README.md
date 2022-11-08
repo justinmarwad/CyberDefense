@@ -29,6 +29,8 @@ This is our entire infrastructure for the 2023 UML CyberDefense class and compet
 ## Docker Compose Services Explained
 
 - DNSmasq: DNS server for the entire infrastructure.
+- Wireguard: VPN server for the entire infrastructure.
+  - More information on docker-compose wireguard configuration: https://spin.atomicobject.com/2022/07/28/wireguard-via-linuxserver/
 
 
 
