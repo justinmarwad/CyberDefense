@@ -1,8 +1,13 @@
 version: "3.8"
 
+networks:
+  wireguard:
+    name: wireguard
+
+
 services:
 
-  # DNSmasq - DNS and DHCP server
+  ## DNSmasq - DNS and DHCP server ##
   dnsmasq:
     container_name: dnsmasq
     image: tschaffter/dnsmasq:2.85    
@@ -15,3 +20,27 @@ services:
      - "53:53/tcp"
 
     restart: unless-stopped
+
+  ## WireGuard - VPN server ##
+   wireguard:
+    container_name: wireguard
+    image: lscr.io/linuxserver/wireguard:v1.0.20210914-ls75
+    restart: unless-stopped
+
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    env_file:
+      - ./config/wireguard/common.env
+      - ./config/wireguard/secret.env
+    environment:
+      - SERVERURL=example.com
+      - SERVERPORT=51820
+      - PEERS=mattLaptop,mattPhone
+    networks:
+      - wireguard
+    ports:
+      - 51820:51820/udp
+    volumes:
+      - ./config/wireguard/modules:/lib/modules
+      - ./config//wireguard/wireguard-config:/config
