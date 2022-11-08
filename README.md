@@ -13,17 +13,20 @@ Our 2023 UML CyberDefense infrastructure - we shall win!
 
 ## What is this?
 
-This is our entire infrastructure for the 2023 UML CyberDefense class and competition. We are using a combination of `docker` and `docker-compose` to manage our infrastructure.
+This is our entire infrastructure for the 2023 UML CyberDefense class and competition. We are using a combination of `docker` and `docker-compose` to run our infrastructure. Ansible is used to configure the hosts running docker and for deploying and running the docker compose configurations.
 
 ## How do I use this?
 
-1. Install `docker` and `docker-compose` on your machine. ```sudo apt install docker.io -y```
+1. Install Ansible on your machine. ```pip install ansible``` should do the trick.
 
 2. Clone this repository. ```git clone https://github.com/justinmarwad/CyberDefense```
 
-3. Run `docker-compose up -d` to start the infrastructure. 
+3. Run the Ansible playbook. ```ansible-playbook -i hosts.yml playbook.yml```. This will: 
+   1. Install Docker and Docker Compose on the hosts. 
+   2. Run hardening scripts for SSH/passwords/etc. 
+   3. Run the docker-compose configuration.
 
-3. Coffee break. 
+4. Coffee break. 
 
 
 ## Docker Compose Services Explained

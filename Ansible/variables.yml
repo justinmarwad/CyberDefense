@@ -1,0 +1,4 @@
+## VARIABLE FILE ## 
+
+# New SSH port
+ssh_port: 2020
