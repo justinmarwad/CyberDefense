@@ -25,7 +25,15 @@ View hosts with:
 
 ### Step 2: Setup Machines ###
 
-Add public key to authorized_keys on all machines
+Create a new ssh key for ansible to use. Name it "ansibleid_rsa.pub": 
+
+```ssh-keygen -t rsa -b 4096```
+
+The "setup.yml" playbook will copy this key to all hosts in addition to installing docker and docker-compose on the hosts. 
+
+```ansible-playbook -i inventory.yaml setup.yml``` 
+
+If this fails, add public key to authorized_keys on all machines manually:
 
 ```ssh-copy-id -i ~/.ssh/id_rsa.pub```
 
