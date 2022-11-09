@@ -1,0 +1,14 @@
+version 3.9:
+
+services:
+  nessus:
+    image: tenableofficial/nessus
+    restart: always
+    ports:
+      - "8834:8834"
+    volumes:
+      - ./config/nessus/nessus-data:/opt/nessus  
+    environment:
+      USERNAME: admin
+      PASSWORD: admin
+      # ACTIVATION_CODE: LD4A-5UQ5-GYCS-YE35-GVX6
