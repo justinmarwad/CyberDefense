@@ -4,7 +4,6 @@ services:
 
   ## DNSmasq - DNS and DHCP server ##
   dnsmasq:
-    container_name: dnsmasq
     image: tschaffter/dnsmasq:2.85    
     volumes:
       - ./config/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf:ro
@@ -24,7 +23,6 @@ services:
 
   ## WireGuard - VPN server ##
   wireguard:
-    container_name: wireguard
     image: lscr.io/linuxserver/wireguard:v1.0.20210914-ls75
 
     cap_add:
@@ -52,19 +50,60 @@ services:
 
 
 
-  ## Nextcloud - Reverse proxy ##:
+  ## Nextcloud - Reverse proxy ##
   nextcloud:
-    container_name: nextcloud
-    image: lscr.io/linuxserver/nextcloud:latest
-    restart: unless-stopped
+    image: nextcloud
+    depends_on:
+      - nextcloud_db
     
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/New_York
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: nextcloud
+      MYSQL_HOST: nextcloud_db
     volumes:
-      - ./config/nextcloud/config:/config
-      - ./config/nextcloud/data:/data
+      - ./config/nextcloud/apps:/var/www/html/apps
+      - ./config/nextcloud/config:/var/www/html/config
+      - ./config/nextcloud/data:/var/www/html/data
     ports:
-      - 443:443
       - 80:80
+
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
+
+  nextcloud_db:
+    image: mariadb
+    
+    environment:
+      MYSQL_ROOT_PASSWORD: nextcloud
+      MYSQL_DATABASE: nextcloud 
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: nextcloud
+    volumes:
+      - ./config/nextcloud/mariadb:/var/lib/mysql
+    
+    deploy:
+      placement:
+        constraints:
+          - "node.role!=manager"  
+      restart_policy:
+        condition: on-failure
+
+
+
+  ## Portainer - Docker management ##
+  portainer:
+    image: portainer/portainer-ce:latest
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - portainer:/data
+    ports:
+      - 9000:9000
+
+volumes: 
+  portainer:

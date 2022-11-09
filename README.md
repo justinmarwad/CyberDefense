@@ -8,6 +8,8 @@ Our 2023 UML CyberDefense infrastructure - we shall win!
   - [TOC](#toc)
   - [What is this?](#what-is-this)
   - [How do I use this?](#how-do-i-use-this)
+    - [(A) Currently](#a-currently)
+    - [(B) Future](#b-future)
   - [Docker Compose Services Explained](#docker-compose-services-explained)
   - [License](#license)
 
@@ -15,7 +17,16 @@ Our 2023 UML CyberDefense infrastructure - we shall win!
 
 This is our entire infrastructure for the 2023 UML CyberDefense class and competition. We are using a combination of `docker` and `docker-compose` to run our infrastructure. Ansible is used to configure the hosts running docker and for deploying and running the docker compose configurations.
 
-## How do I use this?
+
+
+## How do I use this? 
+
+### (A) Currently
+
+1. Run stack: ```docker stack deploy -c docker-compose.yml CyberDefense```
+2. Delete stack: ```docker stack rm CyberDefense```
+
+### (B) Future
 
 1. Install Ansible on your machine. ```pip install ansible``` should do the trick.
 
