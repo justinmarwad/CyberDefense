@@ -44,3 +44,21 @@ services:
     volumes:
       - ./config/wireguard/modules:/lib/modules
       - ./config//wireguard/wireguard-config:/config
+
+
+  ## Nextcloud - Reverse proxy ##:
+  nextcloud:
+    container_name: nextcloud
+    image: lscr.io/linuxserver/nextcloud:latest
+    restart: unless-stopped
+    
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./config/nextcloud/config:/config
+      - ./config/nextcloud/data:/data
+    ports:
+      - 443:443
+      - 80:80
