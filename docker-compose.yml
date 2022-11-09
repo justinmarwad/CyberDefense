@@ -1,10 +1,5 @@
 version: "3.8"
 
-networks:
-  wireguard:
-    name: wireguard
-
-
 services:
 
   ## DNSmasq - DNS and DHCP server ##
@@ -19,13 +14,18 @@ services:
      - "53:53/udp"
      - "53:53/tcp"
 
-    restart: unless-stopped
+    deploy:
+      placement:
+        constraints:
+          - "node.role==manager"  
+      
+      restart_policy:
+        condition: on-failure
 
   ## WireGuard - VPN server ##
   wireguard:
     container_name: wireguard
     image: lscr.io/linuxserver/wireguard:v1.0.20210914-ls75
-    restart: unless-stopped
 
     cap_add:
       - NET_ADMIN
@@ -37,10 +37,15 @@ services:
       - SERVERURL=example.com
       - SERVERPORT=51820
       - PEERS=mattLaptop,mattPhone
-    networks:
-      - wireguard
     ports:
       - 51820:51820/udp
     volumes:
       - ./config/wireguard/modules:/lib/modules
       - ./config//wireguard/wireguard-config:/config
+
+    deploy:
+      placement:
+        constraints:
+          - "node.role==manager"  
+      restart_policy:
+        condition: on-failure
